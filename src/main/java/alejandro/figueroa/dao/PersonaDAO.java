@@ -1,15 +1,20 @@
 package alejandro.figueroa.dao;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import alejandro.figueroa.entities.GenericEntity;
 import alejandro.figueroa.entities.Persona;
 
 public class PersonaDAO implements IGenericDAO{
+	Logger LOG = Logger.getLogger(PersonaDAO.class.getName());
+	
 	private String sqlSave 
 	= "INSERT INTO PERSONAS(NOMBRE, DIRECCION, TELEFONO) VALUES(?, ?, ?)";
 	
@@ -20,11 +25,12 @@ public class PersonaDAO implements IGenericDAO{
 	private String sqlDeleteAll = "DELETE FROM PERSONAS";
 	private String sqlGetAll = "SELECT * FROM PERSONAS";
 	
-	// Ver que pedo con la conexión, no me convence mucho
+	
 	Conexion c = new Conexion();
 
 	@Override
 	public Integer save(GenericEntity e) {
+		LOG.log(Level.INFO, "Incia el metodo save, para guardar a una persona");
 		Integer lastIdInserted = null;
 		Persona p = (Persona) e;
 		Connection conn = null;
@@ -42,20 +48,19 @@ public class PersonaDAO implements IGenericDAO{
 			
 			if(rs.next()){
 				lastIdInserted = rs.getInt(1);
-				System.out.println("Inserted with id: "+lastIdInserted);
+				LOG.log(Level.INFO, "Inserted with id: "+lastIdInserted);
             }
 			
 		}catch(SQLException ex) {
-			System.out.println("Error alv");
+			LOG.log(Level.SEVERE, "Ocurrió un error al intentar guardar una persona");
 			ex.printStackTrace();
 		}finally {
 			try {
 				conn.close();
 			} catch (SQLException e1) {
-				System.out.println("No se pudo cerrar la conexión");
+				LOG.log(Level.SEVERE, "No se pudo cerrar la conexión");
 			}
 		}
-		// Si lastIdInserted sigue en nulo, algo salió mal
 		return lastIdInserted;
 	}
 
