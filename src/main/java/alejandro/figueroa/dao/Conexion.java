@@ -24,23 +24,21 @@ public class Conexion {
     }
    
     public Conexion(){
-    	
-        
-        try {
-        	Class.forName("org.postgresql.Driver");
-        }catch(ClassNotFoundException e) {
-        	logger.info("No fué posible cargar el controlador de la BBDD");
-        }
-        
-        try {
-            c = DriverManager.getConnection(url, user, pws);
-        } catch (SQLException ex) {
-            logger.info("No es posible conectarse a la base de datos");
-        }
-            
     }
     
     public Connection getConnection(){
-        return c;
+    	 try {
+         	Class.forName("org.postgresql.Driver");
+         }catch(ClassNotFoundException e) {
+         	logger.info("No fué posible cargar el controlador de la BBDD");
+         }
+         
+         try {
+             c = DriverManager.getConnection(url, user, pws);
+         } catch (SQLException ex) {
+             logger.info("No es posible conectarse a la base de datos");
+         }
+         return c;
+    
     }
 }

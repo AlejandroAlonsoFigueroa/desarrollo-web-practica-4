@@ -6,9 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import java.util.ArrayList;
 import alejandro.figueroa.entities.GenericEntity;
 import alejandro.figueroa.entities.Persona;
 
@@ -133,7 +134,33 @@ public class PersonaDAO implements IGenericDAO{
 	}
 
 	@Override
-	public void getAll() {
+	public List<GenericEntity> getAll() {
+		List<GenericEntity> personas = new ArrayList();
+		LOG.log(Level.INFO, "Incia el metodo getAll, para obtener a todas las personas");
+		Connection conn = null;
+		Persona pTemp;
+		try {
+			conn = c.getConnection();
+			PreparedStatement ps = conn.prepareStatement(sqlGetAll, Statement.RETURN_GENERATED_KEYS);
+					
+			ResultSet rs  = ps.executeQuery();
+			
+			while(rs.next()) {
+				pTemp = new Persona(rs.getString("NOMBRE"), rs.getString("DIRECCION"), rs.getString("TELEFONO"));
+				personas.add(pTemp);
+			}
+		}catch(SQLException ex) {
+			LOG.log(Level.SEVERE, "Ocurrió un error al intentar guardar una persona");
+			ex.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e1) {
+				LOG.log(Level.SEVERE, "No se pudo cerrar la conexión");
+			}
+		}
+		
+		return personas;
 	}
 	
 

@@ -3,6 +3,7 @@ package alejandro.figueroa.servlets;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import alejandro.figueroa.dao.*;
+import alejandro.figueroa.entities.GenericEntity;
 import alejandro.figueroa.entities.Persona;
 /**
  * Servlet implementation class PersonasServlet
@@ -35,10 +37,14 @@ public class PersonasServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		
 		//dao.save(new Persona("Ale", "Su casa", "32432"));
+		List<GenericEntity> personas = dao.getAll();
 		
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		
-		dao.deleteAll();
+		/*for(GenericEntity p: personas) {
+			Persona p2 = (Persona) p;
+			System.out.println(p2.getDireccion());
+			
+		}*/
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -49,7 +55,6 @@ public class PersonasServlet extends HttpServlet {
 		String direction = request.getParameter("direccion");
 		String tel = request.getParameter("telefono");
 		
-		//
 		Integer idCreated = dao.save(new Persona(name, direction, tel));
 		
 		if(idCreated != null) {
