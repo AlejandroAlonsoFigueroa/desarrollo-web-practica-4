@@ -109,10 +109,6 @@ public class PersonaDAO implements IGenericDAO{
 		Integer rowsModified = null;
 		Connection conn = null;
 		
-		if(id == null) {
-			LOG.log(Level.SEVERE, "El id no debería ser nulo, no se borra nada");
-			return null;
-		}
 		
 		try {
 			conn = c.getConnection();
