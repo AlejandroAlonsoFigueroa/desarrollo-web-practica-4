@@ -24,8 +24,8 @@ public class PersonaDAO implements IGenericDAO{
 	Conexion c = new Conexion();
 
 	@Override
-	public void save(GenericEntity e) {
-		Integer lastIdInserted;
+	public Integer save(GenericEntity e) {
+		Integer lastIdInserted = null;
 		Persona p = (Persona) e;
 		Connection conn = null;
 		try {
@@ -55,6 +55,8 @@ public class PersonaDAO implements IGenericDAO{
 				System.out.println("No se pudo cerrar la conexión");
 			}
 		}
+		// Si lastIdInserted sigue en nulo, algo salió mal
+		return lastIdInserted;
 	}
 
 	@Override

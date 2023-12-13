@@ -18,6 +18,8 @@ import alejandro.figueroa.entities.Persona;
 public class PersonasServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
+	private PersonaDAO dao = new PersonaDAO();
+	
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -31,7 +33,7 @@ public class PersonasServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		PersonaDAO dao = new PersonaDAO();
+		
 		dao.save(new Persona("Ale", "Su casa", "32432"));
 		
 		response.getWriter().append("Served at: ").append(request.getContextPath());
@@ -41,8 +43,17 @@ public class PersonasServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		String name = request.getParameter("nombre");
+		String direction = request.getParameter("direccion");
+		String tel = request.getParameter("telefono");
+		
+		//
+		Integer idCreated = dao.save(new Persona(name, direction, tel));
+		
+		if(idCreated != null) {
+			// todo bien
+		}
+			
 	}
 
 }
