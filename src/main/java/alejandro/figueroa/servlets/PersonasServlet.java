@@ -38,7 +38,7 @@ public class PersonasServlet extends HttpServlet {
 		
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-		dao.deleteById(8);
+		dao.deleteAll();
 	}
 
 	/**

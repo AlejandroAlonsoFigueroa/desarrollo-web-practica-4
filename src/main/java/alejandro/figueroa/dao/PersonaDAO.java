@@ -109,7 +109,27 @@ public class PersonaDAO implements IGenericDAO{
 
 	@Override
 	public Integer deleteAll() {
-		return null;
+		LOG.log(Level.INFO, "Incia el metodo deleteAll, para eliminar a todas las personas");
+		Integer rowsModified = null;
+		Connection conn = null;
+		try {
+			conn = c.getConnection();
+			PreparedStatement ps = conn.prepareStatement(sqlDeleteAll, Statement.RETURN_GENERATED_KEYS);
+					
+			rowsModified = ps.executeUpdate();
+			
+			LOG.log(Level.INFO, "Registros eliminados: "+rowsModified);
+		}catch(SQLException ex) {
+			LOG.log(Level.SEVERE, "Ocurrió un error al intentar guardar una persona");
+			ex.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e1) {
+				LOG.log(Level.SEVERE, "No se pudo cerrar la conexión");
+			}
+		}
+		return rowsModified;
 	}
 
 	@Override
