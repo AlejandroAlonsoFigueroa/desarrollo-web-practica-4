@@ -25,7 +25,7 @@ public class PersonaDAO implements IGenericDAO{
 	private String sqlDeleteById = "DELETE FROM PERSONAS WHERE ID = ?";
 	private String sqlDeleteAll = "DELETE FROM PERSONAS";
 	private String sqlGetAll = "SELECT * FROM PERSONAS";
-	
+	private String sqlGetById  = "SELECT * FROM PERSONAS WHERE ID = ?";
 	
 	Conexion c = new Conexion();
 
@@ -66,13 +66,46 @@ public class PersonaDAO implements IGenericDAO{
 	}
 
 	@Override
-	public void update(GenericEntity e) {
+	public Integer update(GenericEntity e) {
+		Integer updatedCorrectly = null;
+		Integer id = e.getId();
+		Persona p = (Persona) e;
 		
+		LOG.log(Level.INFO, "Incia el metodo update, para actualizar a una persona con el id: "+id);
+		
+		Connection conn = null;
+		
+		try {
+			conn = c.getConnection();
+			
+			PreparedStatement ps = conn.prepareStatement(sqlUpdate, Statement.RETURN_GENERATED_KEYS);
+			
+			ps.setString(1, p.getNombre());
+			ps.setString(2, p.getDireccion());
+			ps.setString(3, p.getTelefono());
+			ps.setInt(4, id);
+			
+			
+			ps.executeUpdate();
+			
+			updatedCorrectly = 1;
+			LOG.log(Level.INFO, "Persona actualizada correctamente");
+		}catch(SQLException ex) {
+			LOG.log(Level.SEVERE, "Ocurrió un error al intentar actualizar una persona");
+			ex.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e1) {
+				LOG.log(Level.SEVERE, "No se pudo cerrar la conexión");
+			}
+		}
+		return updatedCorrectly;
 	}
 
 	@Override
 	public Integer deleteById(Integer id) {
-		LOG.log(Level.INFO, "Incia el metodo delete, para eliminar a una persona");
+		LOG.log(Level.INFO, "Incia el metodo deleteById, para eliminar a una persona");
 		Integer rowsModified = null;
 		Connection conn = null;
 		
@@ -104,8 +137,37 @@ public class PersonaDAO implements IGenericDAO{
 	}
 
 	@Override
-	public Object getById(Integer id) {
-		return null;
+	public GenericEntity getById(Integer id) {
+		LOG.log(Level.INFO, "Incia el metodo getById, para obtener la persona con el id: "+id);
+		
+		GenericEntity p = null;
+		Connection conn = null;
+		
+		try {
+			conn = c.getConnection();
+			PreparedStatement ps = conn.prepareStatement(sqlGetById, Statement.RETURN_GENERATED_KEYS);
+					
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				String n = rs.getString("NOMBRE");
+				String d = rs.getString("DIRECCION");
+				String t = rs.getString("TELEFONO");
+				p = new Persona(n, d, t);
+				p.setId(rs.getInt("ID"));
+			}
+		}catch(SQLException ex) {
+			LOG.log(Level.SEVERE, "Ocurrió un error al intentar guardar una persona");
+			ex.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e1) {
+				LOG.log(Level.SEVERE, "No se pudo cerrar la conexión");
+			}
+		}
+		return p;
 	}
 
 	@Override
@@ -147,6 +209,7 @@ public class PersonaDAO implements IGenericDAO{
 			
 			while(rs.next()) {
 				pTemp = new Persona(rs.getString("NOMBRE"), rs.getString("DIRECCION"), rs.getString("TELEFONO"));
+				pTemp.setId(rs.getInt("ID"));
 				personas.add(pTemp);
 			}
 		}catch(SQLException ex) {

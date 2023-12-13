@@ -44,6 +44,11 @@ public class PersonasServlet extends HttpServlet {
 			System.out.println(p2.getDireccion());
 			
 		}*/
+		Persona p = (Persona) dao.getById(19);
+		
+		System.out.println(p);
+		p.setDireccion("Una dirección distinta");
+		Integer updated = dao.update(p);
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
