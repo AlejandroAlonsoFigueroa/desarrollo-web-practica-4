@@ -34,9 +34,11 @@ public class PersonasServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		dao.save(new Persona("Ale", "Su casa", "32432"));
+		//dao.save(new Persona("Ale", "Su casa", "32432"));
 		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		dao.deleteById(8);
 	}
 
 	/**
