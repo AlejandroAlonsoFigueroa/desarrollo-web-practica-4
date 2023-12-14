@@ -101,6 +101,7 @@ public class PersonasServlet extends HttpServlet {
 		}*/
 		String ins = request.getParameter("instruccion");
 		
+		Integer resultOfUpdateOrSave = null;
 		if(ins.equals("actualizar")) {
 			String id = request.getParameter("id");
 			String nombre = request.getParameter("nombre");
@@ -116,14 +117,30 @@ public class PersonasServlet extends HttpServlet {
 			p.setTelefono(tel);
 			p.setDireccion(dir);
 			
-			pService.update(p);
-		}else {
+			resultOfUpdateOrSave = pService.update(p);
+		}else if (ins.equals("guardar")){
+			
+			String nombre = request.getParameter("nombre");
+			String dir = request.getParameter("direccion");
+			String tel = request.getParameter("telefono");
+			
+		
+			Persona p = new Persona();
+			
+			p.setNombre(nombre);
+			p.setTelefono(tel);
+			p.setDireccion(dir);
+			
+			resultOfUpdateOrSave = pService.save(p);
 			
 		}
 		//this.doGet(request, response);
 		
-		request.getRequestDispatcher("/exito.jsp").forward(request, response);
+		if(resultOfUpdateOrSave !=null) {
+			request.getRequestDispatcher("/exito.jsp").forward(request, response);
+		}else {
 			
+		}
 	}
 
 }

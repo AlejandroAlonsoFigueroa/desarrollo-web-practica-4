@@ -30,7 +30,7 @@
 		
 		
 		<div>
-			<button>Guardar persona</button>
+			<button><a href = "guardar.jsp">Guardar persona</a></button>
 		</div>
 		<%
 			List<Persona> personas = (List<Persona>) request.getAttribute("personas");
