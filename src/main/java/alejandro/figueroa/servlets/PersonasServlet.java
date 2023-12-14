@@ -21,7 +21,7 @@ public class PersonasServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	private PersonaDAO dao = new PersonaDAO();
-	
+	private PersonaService pService = new PersonaService();
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -55,7 +55,7 @@ public class PersonasServlet extends HttpServlet {
 		
 		
 		
-		PersonaService pService = new PersonaService();
+	
 		
 		String instruccion = request.getParameter("instruccion");
 		
@@ -71,6 +71,13 @@ public class PersonasServlet extends HttpServlet {
 					request.setAttribute("personas", pService.getAll());
 					request.getRequestDispatcher("/lista.jsp").forward(request, response);
 					break;
+				case "editar":
+					Persona per = pService.getById(Integer.parseInt(request.getParameter("id")));
+					request.setAttribute("perEditar", per);
+					request.getRequestDispatcher("/editar.jsp").forward(request, response);
+					//request.setAttribute("personas", pService.getAll());
+					//request.getRequestDispatcher("/lista.jsp").forward(request, response);
+					break;	
 			}
 		}	
 			
@@ -83,7 +90,7 @@ public class PersonasServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String name = request.getParameter("nombre");
+		/*String name = request.getParameter("nombre");
 		String direction = request.getParameter("direccion");
 		String tel = request.getParameter("telefono");
 		
@@ -91,7 +98,31 @@ public class PersonasServlet extends HttpServlet {
 		
 		if(idCreated != null) {
 			// todo bien
+		}*/
+		String ins = request.getParameter("instruccion");
+		
+		if(ins.equals("actualizar")) {
+			String id = request.getParameter("id");
+			String nombre = request.getParameter("nombre");
+			String dir = request.getParameter("direccion");
+			String tel = request.getParameter("telefono");
+			
+			Integer intId = Integer.parseInt(id);
+			
+			Persona p = new Persona();
+			
+			p.setId(intId);
+			p.setNombre(nombre);
+			p.setTelefono(tel);
+			p.setDireccion(dir);
+			
+			pService.update(p);
+		}else {
+			
 		}
+		//this.doGet(request, response);
+		
+		request.getRequestDispatcher("/exito.jsp").forward(request, response);
 			
 	}
 

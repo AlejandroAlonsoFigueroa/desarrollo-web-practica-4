@@ -29,6 +29,9 @@
 		<h1>Personas guardadas</h1>
 		
 		
+		<div>
+			<button>Guardar persona</button>
+		</div>
 		<%
 			List<Persona> personas = (List<Persona>) request.getAttribute("personas");
 		%>
@@ -48,7 +51,14 @@
 							<input type = "hidden" name= "instruccion" value = "borrar"/>
 							<button type = "submit">Borrar</button>
 						</form>
-					</td>		
+					</td>
+					<td>
+						<form action = "" method = "GET">
+							<input type = "hidden" name= "id" value = "<%=p.getId()%>"/>
+							<input type = "hidden" name= "instruccion" value = "editar"/>
+							<button type = "submit">Editar</button>
+						</form>
+					</td>				
 				</tr>
 				
 				

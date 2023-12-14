@@ -15,4 +15,8 @@ public class Persona extends GenericEntity{
 	private String direccion;
 	private String telefono;
 	
+	public Persona() {
+		
+	}
+	
 }
