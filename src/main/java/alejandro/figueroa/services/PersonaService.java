@@ -1,5 +1,6 @@
 package alejandro.figueroa.services;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,8 +28,13 @@ public class PersonaService {
 	/*
 	 * Obtiene todos los registros de la tabla PERSONAS
 	 */
-	public List<GenericEntity> getAll() {
-		return this.personaDAO.getAll();
+	public List<Persona> getAll() {
+		List<Persona> personas = new ArrayList();
+		for(GenericEntity g: this.personaDAO.getAll()) {
+			Persona p = (Persona) g;
+			personas.add(p);
+		}
+		return personas;
 	}
 	/*
 	 * Obtiene un registro de la tabla PERSONAS por id

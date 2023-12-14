@@ -1,5 +1,5 @@
 package alejandro.figueroa.servlets;
-
+import alejandro.figueroa.services.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -50,8 +50,35 @@ public class PersonasServlet extends HttpServlet {
 		p.setDireccion("Una dirección distinta");
 		Integer updated = dao.update(p);
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		// como retorno o redirigo a una vista con el modelo aca 
+		
+		
+		
+		PersonaService pService = new PersonaService();
+		
+		String instruccion = request.getParameter("instruccion");
+		
+		if(request.getParameter("id") == null) {
+			request.setAttribute("personas", pService.getAll());
+			request.getRequestDispatcher("/lista.jsp").forward(request, response);
+		}else {
+			String ins = request.getParameter("instruccion");
+			
+			switch(ins) {
+				case "borrar":
+					pService.deleteById(Integer.parseInt(request.getParameter("id")));
+					request.setAttribute("personas", pService.getAll());
+					request.getRequestDispatcher("/lista.jsp").forward(request, response);
+					break;
+			}
+		}	
+			
+			
+		
 	}
 
+	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
